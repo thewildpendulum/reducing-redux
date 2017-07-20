@@ -1,6 +1,6 @@
 # Reducing Redux: Roll your own state management
 
-^ Hi. My name is Tim and I'm a developer at Braintree and today I'm going to talk to you about Redux.
+^ Hi. My name is Tim and I'm a developer at Braintree in Chicago and today I'm going to talk to you about Redux.
 
 ^Now before I begin, how many people are actually using redux in production? Raise your hands and I'm going to ask you to keep them up. 
 
@@ -12,7 +12,7 @@
 
 ---
 
-# When should I use Redux?
+# Should I use Redux?
 ^ Sound good? Now, you are probably holding up your not dominant hand. In celebration for the bright future ahead of us, everybody do your best to high five the person next to you
 
 ^Have you ever asked yourself "why does redux exist?" Maybe you'd say "oh, it makes state management easier. Or because it works well with react. Or it's a more "functional" way to do JS. WRONG.
@@ -62,7 +62,7 @@
 
 # Principle 1: Single source of truth
 
-The state of your whole application is stored in an object tree within a single store.
+> The state of your whole application is stored in an object tree within a single store.
 
 ---
 
@@ -143,7 +143,7 @@ const currentState = store({}) // getState()
 
 # Principle 2: State is read-only
 
-The only way to change the state is to emit an action, an object describing what happened.
+> The only way to change the state is to emit an action, an object describing what happened.
 
 ---
 
@@ -173,13 +173,13 @@ const addUser = (first, last) => {
 
 ^ What I like about them is they give you two things: an easy and concise way to generate actions and a place to put business logic. Remember that reducers have to be pure, so you if you want to add a date or a unique id to something, those are impure by definition. Action creators, on the other hand, can be whatever you want them to be. They're a helpful tool.
 
-^ One of the biggest complaints about redux is the boilerplate. Well guess what, if you use redux, there's gonna be some boilerplate. If you want to reduce the boilerplate, the onus will be on you to accomplish that. When I'm working on app, the repetition from boilerplate is often very far down my list of problems, so this doesn't tend to bother me much. However, that's a choice you have to make for yourself.
+^ One of the biggest complaints about redux is the boilerplate that comes from actions and action creators. Some people have come up with ways to reduce the boilerplate, but it'll be on you to decide how to address it. When I'm working on app, the repetition from boilerplate is often very far down my list of problems, so this doesn't tend to bother me much. You may feel differently. If the boilerplate outweighs the benefits you get from action creators, the easiest solution is to not use them. Do what works for you.
 
 ---
 
 # Principle 3: Changes are made with pure functions
 
-To specify how the state tree is transformed by actions, you write pure reducers.
+> To specify how the state tree is transformed by actions, you write pure reducers.
 
 ---
 
@@ -247,6 +247,11 @@ actions.reduce(reducer, {total: 0}) // {total: 6}
 # combineReducers()
 
 ```javascript
+const reducers = {
+  users: reduceUsers,
+  comments: reduceComments
+}
+
 function combineReducers(reducers) {
   var reducerKeys = Object.keys(reducers)
 
@@ -263,33 +268,12 @@ function combineReducers(reducers) {
   }
 }
 
-const reducers = {
-  users: reduceUsers,
-  comments: reduceComments
-}
-
-combineReducers(reducers)
-```
-
----
-
-# combineReducers()
-
-```javascript
-const state = {
-  users: [],
-  comments: []
-}
-
-function reducer(state, action) {
-  return {
-    users: reduceUsers(state.users, action),
-    comments: reduceComments(state.comments, action)
-  }
-}
+const reducer = combineReducers(reducers)
 ```
 
 ^ Modular, separates concerns, scales. If you need to add another branch to your state tree, it's just a matter of adding another reducer when you combine them. This isn't really life-changing, but it's a useful feature.
+
+^ And that's it for the three principles. We're done. You now understand all the underlying concepts of redux. Single source of truth, state is read-only, changes are pure functions.
 
 ---
 
